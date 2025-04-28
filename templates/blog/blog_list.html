@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - Sanam Raj Chaudhary{% endblock %}
+
+{% block content %}
+<!-- Blog Header -->
+<section class="page-header blog-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h1>Tech <span class="highlight">Insights</span></h1>
+                <p>Thoughts, tutorials, and perspectives on modern technology</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Filter -->
+<section class="blog-filter sticky-top">
+    <div class="container">
+        <div class="filter-wrapper" data-aos="fade-up">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <form action="{% url 'blog_list' %}" method="get" class="search-form">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" name="q" class="form-control border-start-0" placeholder="Search articles..." value="{{ request.GET.q|default_if_none:'' }}">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-md-end">
+                        <div class="tag-filter">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="tagFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-tag me-2"></i>Filter by Tag
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="tagFilterDropdown">
+                                    <li><a class="dropdown-item {% if not request.GET.tag %}active{% endif %}" href="{% url 'blog_list' %}">All Tags</a></li>
+                                    {% for tag in all_tags %}
+                                        <li>
+                                            <a class="dropdown-item {% if request.GET.tag == tag %}active{% endif %}" href="{% url 'blog_list' %}?tag={{ tag|urlencode }}">{{ tag }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Post -->
+{% if featured_post %}
+<section class="featured-post section-padding">
+    <div class="container">
+        <div class="featured-wrapper" data-aos="fade-up">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="featured-image position-relative">
+                        <img src="{{ featured_post.featured_image.url }}" alt="{{ featured_post.title }}" class="img-fluid rounded-4">
+                        <div class="featured-badge">
+                            <span><i class="fas fa-star me-1"></i>Featured</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-flex flex-column justify-content-center">
+                    <div class="featured-meta">
+                        <span class="date"><i class="far fa-calendar-alt me-1"></i>{{ featured_post.created_at|date:"F j, Y" }}</span>
+                        {% if featured_post.tags %}
+                            <div class="tags mt-2">
+                                {% for tag in featured_post.split_tags|slice:":3" %}
+                                    <a href="{% url 'blog_list' %}?tag={{ tag|urlencode }}" class="tag">{{ tag }}</a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h2 class="featured-title mt-3">{{ featured_post.title }}</h2>
+                    <div class="featured-excerpt mt-3">
+                        {{ featured_post.content|striptags|truncatewords:40 }}
+                    </div>
+                    <div class="mt-4">
+                        <a href="{% url 'blog_detail' slug=featured_post.slug %}" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Blog Grid -->
+<section class="blog-grid section-padding {% if not featured_post %}pt-0{% endif %}">
+    <div class="container">
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'1' }}00">
+                    <article class="blog-card">
+                        <div class="blog-card-header">
+                            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="img-fluid">
+                            <div class="blog-card-date">
+                                <span class="day">{{ post.created_at|date:"d" }}</span>
+                                <span class="month">{{ post.created_at|date:"M" }}</span>
+                            </div>
+                        </div>
+                        <div class="blog-card-body">
+                            {% if post.tags %}
+                                <div class="blog-tags">
+                                    {% for tag in post.split_tags|slice:":2" %}
+                                        <a href="{% url 'blog_list' %}?tag={{ tag|urlencode }}" class="tag">{{ tag }}</a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <h3 class="blog-title">
+                                <a href="{% url 'blog_detail' slug=post.slug %}">{{ post.title }}</a>
+                            </h3>
+                            <div class="blog-excerpt">
+                                {{ post.content|striptags|truncatewords:15 }}
+                            </div>
+                        </div>
+                        <div class="blog-card-footer">
+                            <a href="{% url 'blog_detail' slug=post.slug %}" class="read-more">
+                                Read More <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="empty-state" data-aos="fade-up">
+                        <img src="{% static 'images/empty-blog.svg' %}" alt="No posts found" class="img-fluid mb-4" style="max-height: 200px;">
+                        <h3>No Posts Found</h3>
+                        <p>There are no blog posts matching your criteria.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if posts.has_other_pages %}
+        <div class="pagination-wrapper mt-5" data-aos="fade-up">
+            <nav aria-label="Blog pagination">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag|urlencode }}{% endif %}" aria-label="First">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag|urlencode }}{% endif %}" aria-label="Previous">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in posts.paginator.page_range %}
+                        {% if posts.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag|urlencode }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if posts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag|urlencode }}{% endif %}" aria-label="Next">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q|urlencode }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag|urlencode }}{% endif %}" aria-label="Last">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section section-padding bg-light">
+    <div class="container">
+        <div class="newsletter-wrapper" data-aos="fade-up">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="newsletter-content">
+                        <h2>Subscribe to my <span class="highlight">Newsletter</span></h2>
+                        <p>Get notified about new articles, tips, tutorials and exclusive content. No spam, ever.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <form id="newsletterForm" class="newsletter-form" method="post" action="#">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="email" name="email" class="form-control" placeholder="Your email address" required>
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="privacyCheck" required>
+                            <label class="form-check-label" for="privacyCheck">
+                                I agree to the <a href="#">privacy policy</a>.
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

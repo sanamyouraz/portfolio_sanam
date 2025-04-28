@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Skills - Sanam Raj Chaudhary{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h1>My <span class="highlight">Skills</span></h1>
+                <p>A comprehensive overview of my technical expertise</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section class="skills-section section-padding">
+    <div class="container">
+        <!-- Skills Categories -->
+        <div class="skills-filter text-center mb-5" data-aos="fade-up">
+            <ul class="nav nav-pills justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#all-skills" data-bs-toggle="tab">All Skills</a>
+                </li>
+                {% for category_code, category_name in skill_categories %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#{{ category_code|lower }}" data-bs-toggle="tab">{{ category_name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Skills Content -->
+        <div class="tab-content">
+            <!-- All Skills -->
+            <div class="tab-pane fade show active" id="all-skills">
+                {% for category_code, category_name in skill_categories %}
+                <div class="skill-category" data-aos="fade-up">
+                    <h3 class="skill-category-title">{{ category_name }}</h3>
+                    <div class="row">
+                        {% for skill in skills %}
+                        {% if skill.category == category_code %}
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                            <div class="skill-item">
+                                {% if skill.icon %}
+                                <div class="skill-icon">
+                                    <img src="{{ skill.icon.url }}" alt="{{ skill.name }}" class="img-fluid" style="max-height: 50px;">
+                                </div>
+                                {% else %}
+                                <div class="skill-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                {% endif %}
+                                <h4 class="skill-name">{{ skill.name }}</h4>
+                                <div class="skill-level-bar">
+                                    <div class="skill-level-progress" data-level="{{ skill.proficiency }}"></div>
+                                </div>
+                                <div class="skill-percentage mt-1">{{ skill.proficiency }}%</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Category Tabs -->
+            {% for category_code, category_name in skill_categories %}
+            <div class="tab-pane fade" id="{{ category_code|lower }}">
+                <div class="row">
+                    {% for skill in skills %}
+                    {% if skill.category == category_code %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+                        <div class="skill-item">
+                            {% if skill.icon %}
+                            <div class="skill-icon">
+                                <img src="{{ skill.icon.url }}" alt="{{ skill.name }}" class="img-fluid" style="max-height: 50px;">
+                            </div>
+                            {% else %}
+                            <div class="skill-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            {% endif %}
+                            <h4 class="skill-name">{{ skill.name }}</h4>
+                            <div class="skill-level-bar">
+                                <div class="skill-level-progress" data-level="{{ skill.proficiency }}"></div>
+                            </div>
+                            <div class="skill-percentage mt-1">{{ skill.proficiency }}%</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center" data-aos="fade-up">
+                <h2>Interested in working together?</h2>
+                <p>Let's discuss how my skills can help bring your projects to life</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg mt-4">Contact Me</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize skill progress bars
+        const skillLevels = document.querySelectorAll('.skill-level-progress');
+        
+        function animateSkills() {
+            skillLevels.forEach(skill => {
+                const level = skill.getAttribute('data-level');
+                skill.style.width = level + '%';
+            });
+        }
+        
+        // Animate after a short delay
+        setTimeout(animateSkills, 500);
+    });
+</script>
+{% endblock %}

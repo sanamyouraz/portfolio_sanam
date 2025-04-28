@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Me - Sanam Raj Chaudhary{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h1>About <span class="highlight">Me</span></h1>
+                <p>Learn more about my journey, experiences, and what drives me</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Me Section -->
+<section class="about-section section-padding">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-5 mb-lg-0" data-aos="fade-right">
+                <div class="about-image">
+                    <img src="{% static 'images/profile.jpg' %}" alt="Sanam Raj Chaudhary" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-lg-7" data-aos="fade-left">
+                <div class="about-content">
+                    <h2>Who am I?</h2>
+                    <p class="lead">I'm a passionate Full-Stack Developer with expertise in building robust web applications and exploring the world of AI/ML.</p>
+                    <p>With over 5 years of experience in software development, I've had the privilege of working on diverse projects ranging from enterprise applications to innovative startups. My journey began with a strong foundation in computer science and has evolved into a specialization in web technologies and artificial intelligence.</p>
+                    <p>I believe in creating software that not only functions flawlessly but also delivers exceptional user experiences. My approach combines technical excellence with a keen eye for design and usability.</p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <ul class="about-list">
+                                <li><strong>Name:</strong> Sanam Raj Chaudhary</li>
+                                <li><strong>Email:</strong> sanamrajchaudhary22@gmail.com</li>
+                                <li><strong>From:</strong> Kathmandu, Nepal</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="about-list">
+                                <li><strong>Experience:</strong> 1+ Years</li>
+                                <li><strong>Freelance:</strong> Available</li>
+                                <li><strong>Languages:</strong> English, Nepali, Hindi</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="about-buttons mt-4">
+                        <a href="{% static 'Sanam_Raj_Chaudhary_CV_Edited.pdf' %}" class="btn btn-primary me-3" download>Download Resume</a>
+                        <a href="{% url 'contact' %}" class="btn btn-outline-primary">Contact Me</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Education Section -->
+<section class="education-section section-padding bg-light">
+    <div class="container">
+        <div class="section-title text-center" data-aos="fade-up">
+            <h2>My <span class="highlight">Education</span></h2>
+            <p>Academic journey that shaped my professional path</p>
+        </div>
+        <div class="education-timeline mt-5">
+            {% for edu in education %}
+            <div class="education-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+                <div class="education-card">
+                    <div class="education-date">
+                        {{ edu.start_date|date:"M Y" }} - {% if edu.current %}Present{% else %}{{ edu.end_date|date:"M Y" }}{% endif %}
+                    </div>
+                    <h3 class="education-degree">{{ edu.degree }} in {{ edu.field_of_study }}</h3>
+                    <h4 class="education-institution">{{ edu.institution }}</h4>
+                    {% if edu.description %}
+                    <div class="education-description">
+                        {{ edu.description|safe }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center">
+                <p>No education records found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Personal Journey -->
+<section class="journey-section section-padding">
+    <div class="container">
+        <div class="section-title text-center" data-aos="fade-up">
+            <h2>My <span class="highlight">Journey</span></h2>
+            <p>The path that led me to where I am today</p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="journey-card">
+                    <div class="journey-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>How It Started</h3>
+                    <p>My passion for programming began during my early college years when I created my first website. The thrill of seeing my code come to life fueled my desire to dive deeper into software development.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="journey-card">
+                    <div class="journey-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Professional Growth</h3>
+                    <p>Working with talented teams across various industries has shaped my approach to problem-solving and expanded my technical expertise. Each project has been a learning opportunity to refine my skills.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="journey-card">
+                    <div class="journey-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3>Looking Forward</h3>
+                    <p>As technology evolves, so does my enthusiasm for learning. I'm particularly excited about advancements in AI/ML and how they're transforming software development. I'm committed to staying at the forefront of these innovations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interests Section -->
+<section class="interests-section section-padding bg-light">
+    <div class="container">
+        <div class="section-title text-center" data-aos="fade-up">
+            <h2>Beyond <span class="highlight">Coding</span></h2>
+            <p>When I'm not in front of a computer, you'll find me...</p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up">
+                <div class="interest-card">
+                    <div class="interest-icon">
+                        <i class="fas fa-hiking"></i>
+                    </div>
+                    <h3>Hiking</h3>
+                    <p>Exploring trails and enjoying nature's beauty</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="interest-card">
+                    <div class="interest-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Reading</h3>
+                    <p>Diving into tech books and science fiction novels</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="interest-card">
+                    <div class="interest-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3>Photography</h3>
+                    <p>Capturing moments and beautiful landscapes</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="interest-card">
+                    <div class="interest-icon">
+                        <i class="fas fa-chess"></i>
+                    </div>
+                    <h3>Chess</h3>
+                    <p>Strategic thinking and friendly competitions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center" data-aos="fade-up">
+                <h2>Let's work together!</h2>
+                <p>Interested in collaborating or have a project in mind? I'd love to hear from you.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg mt-4">Get In Touch</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

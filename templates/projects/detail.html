@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - Sanam Raj Chaudhary{% endblock %}
+
+{% block content %}
+<!-- Project Banner -->
+<section class="project-detail-banner">
+    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="img-fluid">
+</section>
+
+<!-- Project Content -->
+<section class="project-detail-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8" data-aos="fade-up">
+                <h1 class="mb-4">{{ project.title }}</h1>
+                <div class="project-description mb-5">
+                    {{ project.description|safe }}
+                </div>
+                
+                <!-- Project Gallery -->
+                {% if project.projectimage_set.exists %}
+                <div class="project-gallery mb-5">
+                    <h3 class="mb-4">Project Gallery</h3>
+                    <div class="row">
+                        {% for image in project.projectimage_set.all %}
+                        <div class="col-md-6 mb-4">
+                            <a href="{{ image.image.url }}" class="gallery-item" data-lightbox="project-gallery">
+                                <img src="{{ image.image.url }}" alt="{{ project.title }} Image {{ forloop.counter }}" class="img-fluid rounded">
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="project-info-box">
+                    <h3>Project Info</h3>
+                    <ul class="project-details-list">
+                        <li><span>Client:</span> <span>{{ project.client|default:"Personal Project" }}</span></li>
+                        <li><span>Date:</span> <span>{{ project.completion_date|date:"F Y" }}</span></li>
+                        <li><span>Category:</span> <span>
+                            {% for tech in project.technologies.all|slice:":1" %}
+                                {{ tech.get_category_display }}
+                            {% endfor %}
+                        </span></li>
+                    </ul>
+                    
+                    <div class="project-links mt-4">
+                        {% if project.github_link %}
+                        <a href="{{ project.github_link }}" target="_blank" class="btn btn-dark me-2 mb-2">
+                            <i class="fab fa-github me-2"></i> GitHub Repo
+                        </a>
+                        {% endif %}
+                        {% if project.live_link %}
+                        <a href="{{ project.live_link }}" target="_blank" class="btn btn-primary mb-2">
+                            <i class="fas fa-external-link-alt me-2"></i> Live Preview
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="project-info-box mt-4">
+                    <h3>Technologies Used</h3>
+                    <div class="project-tech-list">
+                        {% for tech in project.technologies.all %}
+                        <span class="tech-badge">{{ tech.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- More Projects -->
+        <div class="more-projects mt-5" data-aos="fade-up">
+            <h3 class="text-center mb-4">More Projects</h3>
+            <div class="row">
+                {% for related_project in project.get_related_projects|slice:":3" %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="{{ related_project.image.url }}" alt="{{ related_project.title }}">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    {% if related_project.github_link %}
+                                        <a href="{{ related_project.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
+                                    {% endif %}
+                                    {% if related_project.live_link %}
+                                        <a href="{{ related_project.live_link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>{{ related_project.title }}</h3>
+                            <p>{{ related_project.short_description }}</p>
+                            <a href="{% url 'project_detail' project_slug=related_project.slug %}" class="btn btn-sm btn-primary mt-3">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p>No related projects found.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center" data-aos="fade-up">
+                <h2>Impressed with my work?</h2>
+                <p>Let's discuss your project and create something amazing together!</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg mt-4">Contact Me</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<script>
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true
+    });
+</script>
+{% endblock %}

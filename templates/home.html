@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sanam Raj Chaudhary - Software Developer{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" id="hero">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-lg-6" data-aos="fade-up">
+                <div class="hero-content">
+                    <h1>Hello, I'm <span class="highlight">Sanam Raj Chaudhary</span></h1>
+                    <h2>Full-Stack Developer & AI/ML Enthusiast</h2>
+                    <p>I build high-quality web applications with modern technology stacks and a focus on clean, maintainable code.</p>
+                    <div class="hero-buttons">
+                        <a href="{% url 'project_list' %}" class="btn btn-primary">View My Work</a>
+                        <a href="{% url 'contact' %}" class="btn btn-outline-primary">Get In Touch</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center" data-aos="fade-left" data-aos-delay="300">
+                <div class="hero-image">
+                    <img src="{% static 'images/developer.png' %}" alt="Developer Illustration" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-particles" id="particles-js"></div>
+</section>
+
+<!-- Skills Overview Section -->
+<section class="skills-overview section-padding" id="skills-overview">
+    <div class="container">
+        <div class="section-title text-center" data-aos="fade-up">
+            <h2>My <span class="highlight">Expertise</span></h2>
+            <p>Core technologies I specialize in</p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Full-Stack Development</h3>
+                    <p>Building robust web applications with Django, ASP.NET MVC, and modern JavaScript frameworks</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Database Management</h3>
+                    <p>Designing efficient database solutions with MySQL, Microsoft SQL Server, and ORM frameworks</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI & Machine Learning</h3>
+                    <p>Implementing intelligent systems using TensorFlow, Keras, and Computer Vision techniques</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="300">
+            <a href="{% url 'skills' %}" class="btn btn-outline-primary">All Skills</a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects Section -->
+<section class="featured-projects section-padding bg-light" id="featured-projects">
+    <div class="container">
+        <div class="section-title text-center" data-aos="fade-up">
+            <h2>Featured <span class="highlight">Projects</span></h2>
+            <p>Selected works that showcase my expertise</p>
+        </div>
+        <div class="row mt-5">
+            {% for project in featured_projects %}
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    {% if project.github_link %}
+                                        <a href="{{ project.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
+                                    {% endif %}
+                                    {% if project.live_link %}
+                                        <a href="{{ project.live_link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>{{ project.title }}</h3>
+                            <p>{{ project.short_description }}</p>
+                            <div class="project-tech">
+                                {% for tech in project.technologies.all|slice:":3" %}
+                                    <span class="tech-badge">{{ tech.name }}</span>
+                                {% endfor %}
+                                {% if project.technologies.count > 3 %}
+                                    <span class="tech-badge">+{{ project.technologies.count|add:"-3" }}</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'project_detail' project_slug=project.slug %}" class="btn btn-sm btn-primary mt-3">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>No featured projects yet. Check back soon!</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4" data-aos="fade-up">
+            <a href="{% url 'project_list' %}" class="btn btn-outline-primary">View All Projects</a>
+        </div>
+    </div>
+</section>
+
+<!-- Work Process Section -->
+<section class="work-process section-padding" id="work-process">
+    <div class="container">
+        <div class="section-title text-center" data-aos="fade-up">
+            <h2>My <span class="highlight">Development Process</span></h2>
+            <p>How I approach software development projects</p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up">
+                <div class="process-step">
+                    <div class="process-number">01</div>
+                    <h3>Research & Planning</h3>
+                    <p>Understanding requirements and creating a solid project roadmap</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="process-step">
+                    <div class="process-number">02</div>
+                    <h3>Design & Architecture</h3>
+                    <p>Creating intuitive UI/UX and robust system architecture</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="process-step">
+                    <div class="process-number">03</div>
+                    <h3>Development</h3>
+                    <p>Building with clean, efficient, and maintainable code</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="process-step">
+                    <div class="process-number">04</div>
+                    <h3>Testing & Deployment</h3>
+                    <p>Ensuring quality and smooth delivery to production</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center" data-aos="fade-up">
+                <h2>Ready to start a project?</h2>
+                <p>Let's collaborate to bring your ideas to life with cutting-edge technology solutions.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg mt-4">Get In Touch</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Particles.js Library -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#6c63ff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#6c63ff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    });
+</script>
+{% endblock %}

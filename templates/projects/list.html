@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects - Sanam Raj Chaudhary{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h1>My <span class="highlight">Projects</span></h1>
+                <p>Showcasing my work and technical expertise</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section class="projects-section section-padding">
+    <div class="container">
+        <!-- Filter Buttons -->
+        <div class="projects-filter text-center mb-5" data-aos="fade-up">
+            <button class="btn btn-outline-primary project-filter active" data-filter="all">All Projects</button>
+            {% regroup technologies by category as tech_categories %}
+            {% for category in tech_categories %}
+                <button class="btn btn-outline-primary project-filter" data-filter="{{ category.grouper|lower }}">{{ category.grouper|title }}</button>
+            {% endfor %}
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="row" id="projects-grid">
+            {% for project in projects %}
+                <div class="col-lg-4 col-md-6 mb-4 project-item {% for tech in project.technologies.all %}{{ tech.category|lower }} {% endfor %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    {% if project.github_link %}
+                                        <a href="{{ project.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
+                                    {% endif %}
+                                    {% if project.live_link %}
+                                        <a href="{{ project.live_link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <h3>{{ project.title }}</h3>
+                            <p>{{ project.short_description }}</p>
+                            <div class="project-tech">
+                                {% for tech in project.technologies.all|slice:":3" %}
+                                    <span class="tech-badge">{{ tech.name }}</span>
+                                {% endfor %}
+                                {% if project.technologies.count > 3 %}
+                                    <span class="tech-badge">+{{ project.technologies.count|add:"-3" }}</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'project_detail' project_slug=project.slug %}" class="btn btn-sm btn-primary mt-3">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>No projects found. Check back soon for updates!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section section-padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center" data-aos="fade-up">
+                <h2>Have a project in mind?</h2>
+                <p>Let's discuss how we can collaborate to bring your ideas to life.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg mt-4">Get In Touch</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Projects filtering
+        const projectFilters = document.querySelectorAll('.project-filter');
+
+        projectFilters.forEach(filter => {
+            filter.addEventListener('click', function() {
+                // Remove active class from all filters
+                projectFilters.forEach(f => f.classList.remove('active'));
+                // Add active class to current filter
+                this.classList.add('active');
+
+                const category = this.getAttribute('data-filter');
+                const projectItems = document.querySelectorAll('.project-item');
+
+                projectItems.forEach(item => {
+                    if (category === 'all') {
+                        item.style.display = 'block';
+                    } else {
+                        if (item.classList.contains(category)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}
