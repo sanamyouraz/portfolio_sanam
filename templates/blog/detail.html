@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load my_tags %}
+
 
 {% block title %}{{ post.title }} - Sanam Raj Chaudhary{% endblock %}
 
@@ -22,7 +24,7 @@
             <div class="col-lg-10">
                 <div class="post-meta" data-aos="fade-up">
                     <div class="d-flex align-items-center">
-                        <a href="{% url 'blog:list' %}" class="back-to-blog">
+                        <a href="{% url 'blog_list' %}" class="back-to-blog">
                             <i class="fas fa-arrow-left me-2"></i>Back to Blog
                         </a>
                         <span class="post-date ms-auto">
@@ -34,7 +36,7 @@
                 {% if post.tags %}
                     <div class="post-tags" data-aos="fade-up" data-aos-delay="150">
                         {% for tag in post.tags.split %}
-                            <a href="{% url 'blog:list' %}?tag={{ tag|trim }}" class="tag">{{ tag|trim }}</a>
+                            <a href="{% url 'blog_list' %}?tag={{ tag|trim }}" class="tag">{{ tag|trim }}</a>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -117,7 +119,7 @@
                 <div class="author-card" data-aos="fade-up">
                     <div class="row align-items-center">
                         <div class="col-md-3 mb-4 mb-md-0 text-center text-md-start">
-                            <img src="{% static 'images/author.jpg' %}" alt="Sanam Raj Chaudhary" class="img-fluid rounded-circle author-image">
+                            <img src="{% static 'images/profile.jpg' %}" alt="Sanam Raj Chaudhary" class="img-fluid rounded-circle author-image">
                         </div>
                         <div class="col-md-9">
                             <h4 class="author-name">Written by Sanam Raj Chaudhary</h4>
@@ -157,17 +159,17 @@
                             {% if related_post.tags %}
                                 <div class="blog-tags">
                                     {% for tag in related_post.tags.split|slice:":2" %}
-                                        <a href="{% url 'blog:list' %}?tag={{ tag|trim }}" class="tag">{{ tag|strip }}</a>
+                                        <a href="{% url 'blog_list' %}?tag={{ tag|trim }}" class="tag">{{ tag|strip }}</a>
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                            <h3 class="blog-title"><a href="{% url 'blog:detail' slug=related_post.slug %}">{{ related_post.title }}</a></h3>
+                            <h3 class="blog-title"><a href="{% url 'blog_detail' slug=related_post.slug %}">{{ related_post.title }}</a></h3>
                             <div class="blog-excerpt">
                                 {{ related_post.content|striptags|truncatewords:15 }}
                             </div>
                         </div>
                         <div class="blog-card-footer">
-                            <a href="{% url 'blog:detail' slug=related_post.slug %}" class="read-more">
+                            <a href="{% url 'blog_detail' slug=related_post.slug %}" class="read-more">
                                 Read More <i class="fas fa-arrow-right ms-1"></i>
                             </a>
                         </div>
@@ -264,4 +266,3 @@
 </script>
 {% endblock %}
 {% endblock %}
-

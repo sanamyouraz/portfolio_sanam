@@ -97,6 +97,9 @@ class Contact(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+from django.db import models
+from django.utils.text import slugify
+from ckeditor.fields import RichTextField  # assuming you are using CKEditor
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=255)
@@ -107,6 +110,7 @@ class BlogPost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
     tags = models.CharField(max_length=255, help_text="Comma separated tags")
+    is_featured = models.BooleanField(default=False)  # Add this line for the featured post
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -115,6 +119,16 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def split_tags(self):
+        """Returns list of tags split from the tags field"""
+        if self.tags:
+            return [tag.strip() for tag in self.tags.split(',')]
+        return []
+
+    class Meta:
+        ordering = ['-created_at']
 
     class Meta:
         ordering = ['-created_at']

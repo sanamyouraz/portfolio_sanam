@@ -48,15 +48,15 @@
                         </span></li>
                     </ul>
                     
-                    <div class="project-links mt-4">
+                    <div class="project-links mt-4 d-flex flex-wrap" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: start;">
                         {% if project.github_link %}
-                        <a href="{{ project.github_link }}" target="_blank" class="btn btn-dark me-2 mb-2">
-                            <i class="fab fa-github me-2"></i> GitHub Repo
+                        <a href="{{ project.github_link }}" target="_blank" class="btn btn-dark me-2 mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                        <i class="fab fa-github"></i>
                         </a>
                         {% endif %}
                         {% if project.live_link %}
-                        <a href="{{ project.live_link }}" target="_blank" class="btn btn-primary mb-2">
-                            <i class="fas fa-external-link-alt me-2"></i> Live Preview
+                        <a href="{{ project.live_link }}" target="_blank" class="btn btn-primary mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                        <i class="fas fa-external-link-alt"></i>
                         </a>
                         {% endif %}
                     </div>
@@ -74,39 +74,54 @@
         </div>
         
         <!-- More Projects -->
-        <div class="more-projects mt-5" data-aos="fade-up">
-            <h3 class="text-center mb-4">More Projects</h3>
-            <div class="row">
-                {% for related_project in project.get_related_projects|slice:":3" %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="project-card">
-                        <div class="project-image">
-                            <img src="{{ related_project.image.url }}" alt="{{ related_project.title }}">
-                            <div class="project-overlay">
-                                <div class="project-links">
-                                    {% if related_project.github_link %}
-                                        <a href="{{ related_project.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
-                                    {% endif %}
-                                    {% if related_project.live_link %}
-                                        <a href="{{ related_project.live_link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-                                    {% endif %}
+        <section class="more-projects section-padding bg-light" id="more-projects">
+            <div class="container">
+                <div class="section-title text-center" data-aos="fade-up">
+                    <h2>More <span class="highlight">Projects</span></h2>
+                    <p>Additional works that I have worked on</p>
+                </div>
+                <div class="row mt-5">
+                    {% for related_project in related_projects %}
+                        <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|stringformat:'d' }}00">
+
+                            <div class="project-card">
+                                <div class="project-image">
+                                    <img src="{{ related_project.image.url }}" alt="{{ related_project.title }}" class="img-fluid">
+                                    <div class="project-overlay">
+                                        <div class="project-links">
+                                            {% if related_project.github_link %}
+                                                <a href="{{ related_project.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
+                                            {% endif %}
+                                            {% if related_project.live_link %}
+                                                <a href="{{ related_project.live_link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="project-content">
+                                    <h3>{{ related_project.title }}</h3>
+                                    <p>{{ related_project.short_description }}</p>
+                                    <div class="project-tech">
+                                        {% for tech in related_project.technologies.all|slice:":3" %}
+                                            <span class="tech-badge">{{ tech.name }}</span>
+                                        {% endfor %}
+                                        {% if related_project.technologies.count > 3 %}
+                                            <span class="tech-badge">+{{ related_project.technologies.count|add:"-3" }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'project_detail' project_slug=related_project.slug %}" class="btn btn-sm btn-primary mt-3">View Details</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="project-content">
-                            <h3>{{ related_project.title }}</h3>
-                            <p>{{ related_project.short_description }}</p>
-                            <a href="{% url 'project_detail' project_slug=related_project.slug %}" class="btn btn-sm btn-primary mt-3">View Details</a>
+                    {% empty %}
+                        <div class="col-12 text-center">
+                            <p>No related projects found.</p>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                {% empty %}
-                <div class="col-12 text-center">
-                    <p>No related projects found.</p>
-                </div>
-                {% endfor %}
             </div>
-        </div>
+        </section>
+
     </div>
 </section>
 

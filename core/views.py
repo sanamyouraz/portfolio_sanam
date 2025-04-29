@@ -54,6 +54,15 @@ class ProjectDetailView(DetailView):
     context_object_name = 'project'
     slug_url_kwarg = 'project_slug'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Assuming 'related_projects' is a queryset of other projects related to the current project
+        context['related_projects'] = Project.objects.exclude(slug=self.kwargs['project_slug'])[
+                                      :4]  # Example: exclude the current project and get the first 4 related projects
+
+        return context
+
 
 class ExperienceView(ListView):
     model = Experience
@@ -76,27 +85,56 @@ class ContactSuccessView(TemplateView):
     template_name = 'contact_success.html'
 
 
+# core/views.py
+from django.views.generic import ListView
+from django.db.models import Q
+from .models import BlogPost
+
+# views.py
+from django.shortcuts import render
 from django.views.generic import ListView
 from .models import BlogPost
 
-# core/views.py
 from django.views.generic import ListView
 from .models import BlogPost
-
-# core/views.py
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django.db.models import Q
 from .models import BlogPost
 
 class BlogListView(ListView):
     model = BlogPost
-    template_name = 'blog/blog_list.html'  # Adjust this if needed
-    context_object_name = 'blog_posts'
+    template_name = 'blog/blog_list.html'  # Make sure this matches your template location
+    context_object_name = 'posts'  # Match the variable name in template
+    paginate_by = 9  # Add pagination as shown in template
 
+from django.views.generic import DetailView
+from django.db.models import Q
+from .models import BlogPost
 
 class BlogDetailView(DetailView):
     model = BlogPost
     template_name = 'blog/detail.html'
     context_object_name = 'post'
-    slug_url_kwarg = 'post_slug'
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_post = self.get_object()
+
+        # Get tags from current post
+        current_tags = current_post.split_tags
+
+        if current_tags:
+            # Build a Q object to filter by tags
+            tag_filter = Q()
+            for tag in current_tags:
+                tag_filter |= Q(tags__icontains=tag)
+
+            related_posts = BlogPost.objects.filter(tag_filter).exclude(id=current_post.id).distinct()[:3]
+        else:
+            related_posts = BlogPost.objects.exclude(id=current_post.id)[:3]  # fallback
+
+        context['related_posts'] = related_posts
+        return context
 
 
