@@ -48,7 +48,11 @@
                         </div>
                     </div>
                     <div class="about-buttons mt-4">
-                        <a href="{% static 'Sanam_Raj_Chaudhary_CV_Edited.pdf' %}" class="btn btn-primary me-3" download>Download Resume</a>
+                        {% if resume %}
+                            <a href="{{ resume.file.url }}" class="btn btn-primary me-3" download>Download Resume</a>
+                        {% else %}
+                            <p>No resume available for download.</p>
+                        {% endif %}
                         <a href="{% url 'contact' %}" class="btn btn-outline-primary">Contact Me</a>
                     </div>
                 </div>

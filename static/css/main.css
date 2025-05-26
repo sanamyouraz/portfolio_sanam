@@ -19,6 +19,11 @@ body {
     scroll-behavior: smooth;
     padding-top: 76px; /* For fixed navbar */
 }
+/* Dark mode styles for all major layout elements */
+
+
+/* Add more styles as needed */
+
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-primary);

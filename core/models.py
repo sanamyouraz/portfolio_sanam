@@ -4,6 +4,10 @@ from django.utils.text import slugify
 from ckeditor.fields import RichTextField
 
 
+class Resume(models.Model):
+    title = models.CharField(max_length=100, default="Resume")
+    file = models.FileField(upload_to='resumes/')  # saved to MEDIA_ROOT/resumes/
+
 class Skill(models.Model):
     CATEGORY_CHOICES = [
         ('LANGUAGE', 'Programming Language'),

@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from .models import Skill, Experience, Project, Education, BlogPost
 from .forms import ContactForm
 
+from django.views.generic import TemplateView
+from .models import Project, Skill, Resume  # Import Resume model
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -14,7 +16,9 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['featured_projects'] = Project.objects.filter(featured=True)[:3]
         context['skills'] = Skill.objects.all()[:6]
+        context['resume'] = Resume.objects.last()  # Get latest uploaded resume
         return context
+
 
 
 class AboutView(TemplateView):
@@ -23,6 +27,7 @@ class AboutView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['education'] = Education.objects.all()
+        context['resume'] = Resume.objects.last()  # Get latest uploaded resume
         return context
 
 

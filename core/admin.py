@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Skill, Experience, Project, Education, Contact, BlogPost
+from .models import Skill, Experience, Project, Education, Contact, BlogPost,Resume
+
+
+@admin.register(Resume)
+class ResumeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'file')
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
